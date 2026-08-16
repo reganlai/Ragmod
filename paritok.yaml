@@ -1,0 +1,10 @@
+# Ragmod — Paritok hosted GPU (hackathon requirement)
+# https://build-with-paritok.devpost.com/resources
+#
+# Prefer: export PARITOK_API_KEY=pk_live_...
+# Or paste the key under gpu_server.api_key (never commit a real key).
+use_gpu_server: true
+gpu_server:
+  api_key: ""
+tool_discovery:
+  strategy: embedding

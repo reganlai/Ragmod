@@ -120,7 +120,3 @@ Every LLM call goes through the local Paritok proxy with **hosted GPU** (`use_gp
 
 - [#19](https://github.com/Paritok-official/paritok-4b-v1/issues/19) — `/stats` on failed upstreams, A/B framing  
 - [#22](https://github.com/Paritok-official/paritok-4b-v1/issues/22) — Gemini `thought_signature` vs synthetic tool bootstraps  
-
-## License
-
-Apache License 2.0 — see [LICENSE](LICENSE).
