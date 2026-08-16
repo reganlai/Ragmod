@@ -1,0 +1,20 @@
+[
+  {
+    "id": "stats_to_savings",
+    "question": "How does the proxy turn raw stats into savings?",
+    "expect_path": "ragmod/gateway/proxy.py",
+    "expect_keywords": ["stats_to_savings", "compressed"]
+  },
+  {
+    "id": "search_excludes",
+    "question": "How does search_repo keep ripgrep out of .venv and __pycache__?",
+    "expect_path": "ragmod/tools/repo.py",
+    "expect_keywords": ["_RG_EXCLUDE", "search_repo"]
+  },
+  {
+    "id": "bootstrap_search",
+    "question": "Where does the agent bootstrap its first search_repo tool result before the model acts?",
+    "expect_path": "ragmod/agent/loop.py",
+    "expect_keywords": ["bootstrap", "search_repo"]
+  }
+]

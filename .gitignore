@@ -1,0 +1,47 @@
+# Secrets / local-only
+.env
+.env.*
+!.env.example
+
+# Internal / non-judge docs (keep local; not for the public repo)
+docs/USER_GUIDE.md
+docs/PLAN.md
+docs/ARCHITECTURE.md
+docs/CRITIQUE.md
+docs/PARITOK.md
+docs/DEVPOST.md
+docs/SOCIAL.md
+docs/VIDEO_SCRIPT.md
+
+# Python
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+.tox/
+dist/
+build/
+*.egg
+
+# Editor / OS
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Crash dumps / logs / Paritok backups
+core
+core.*
+*.log
+.paritok-bak
+*.bak
+
+# SVG sources for screenshots (PNGs are committed)
+examples/screenshots/*.svg

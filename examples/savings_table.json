@@ -1,0 +1,133 @@
+[
+  {
+    "arm": "baseline",
+    "task_id": "stats_to_savings",
+    "question": "How does the proxy turn raw stats into savings?",
+    "prompt_tokens": 4626,
+    "completion_tokens": 262,
+    "requests": 4,
+    "latency_s": 17.101,
+    "turns": 4,
+    "quality": 2,
+    "quality_max": 2,
+    "answer": "The proxy turns raw stats into savings in `ragmod/gateway/proxy.py` via `stats_to_savings(raw)` by mapping the raw JSON response from the proxy's `/stats` endpoint onto the `SavingsStats` contract:\n\n1. **`original`**: Reads `input_tokens_original` (defaulting to `0`).\n2. **`compressed`**: Reads `input_tokens_compressed` (defaulting to `0`).\n3. **`saved`**: Reads `tokens_saved`, falling back to `max(0, original - compressed)` if not provided.\n4. **`ratio`**: Reads `compression_ratio`, falling back to `compressed / original` (or `1.0` if `original` is zero).\n5. **`cost_saved_usd`**: Reads `estimated_cost_saved_usd`, defaulting to `\"$0.00\"` if absent.",
+    "citations": [
+      {
+        "path": "ragmod/gateway/proxy.py",
+        "start": 1,
+        "end": 135
+      }
+    ],
+    "error": null,
+    "proxy_tokens_saved_delta": null
+  },
+  {
+    "arm": "ragmod",
+    "task_id": "stats_to_savings",
+    "question": "How does the proxy turn raw stats into savings?",
+    "prompt_tokens": 6605,
+    "completion_tokens": 113,
+    "requests": 6,
+    "latency_s": 17.778,
+    "turns": 6,
+    "quality": 0,
+    "quality_max": 2,
+    "answer": "Stopped after the turn budget without a usable answer. Try a narrower question or raise --max-turns.",
+    "citations": [],
+    "error": null,
+    "proxy_tokens_saved_delta": -520
+  },
+  {
+    "arm": "baseline",
+    "task_id": "search_excludes",
+    "question": "How does search_repo keep ripgrep out of .venv and __pycache__?",
+    "prompt_tokens": 4909,
+    "completion_tokens": 288,
+    "requests": 4,
+    "latency_s": 12.257,
+    "turns": 4,
+    "quality": 2,
+    "quality_max": 2,
+    "answer": "`search_repo` (`ragmod/tools/repo.py`) keeps ripgrep out of `.venv` and `__pycache__` using two mechanisms:\n\n1. **Ripgrep Exclude Globs:** When executing the `rg` subprocess, it iterates over `_RG_EXCLUDE_GLOBS` and passes each as a negative glob flag (`--glob`):\n   ```python\n   _RG_EXCLUDE_GLOBS = (\n       \"!.git\",\n       \"!.venv\",\n       \"!venv\",\n       \"!__pycache__\",\n       \"!node_modules\",\n       \"!*.egg-info\",\n       \"!dist\",\n       \"!build\",\n   )\n   ```\n\n2. **Python Fallback Skipping:** If ripgrep is not available, the pure-Python fallback search explicitly checks path parts against a `_SKIP_DIR_NAMES` set containing `.venv`, `__pycache__`, and other build/vendor directories to skip them.",
+    "citations": [
+      {
+        "path": "ragmod/tools/repo.py",
+        "start": 1,
+        "end": 75
+      }
+    ],
+    "error": null,
+    "proxy_tokens_saved_delta": null
+  },
+  {
+    "arm": "ragmod",
+    "task_id": "search_excludes",
+    "question": "How does search_repo keep ripgrep out of .venv and __pycache__?",
+    "prompt_tokens": 12922,
+    "completion_tokens": 465,
+    "requests": 6,
+    "latency_s": 29.428,
+    "turns": 6,
+    "quality": 2,
+    "quality_max": 2,
+    "answer": "`search_repo` (defined in `ragmod/tools/repo.py`) keeps ripgrep out of `.venv`, `__pycache__`, and other unwanted directories using two main mechanisms:\n\n1. **Ripgrep Negative Globs (`_RG_EXCLUDE_GLOBS`):**\n   When invoking the `rg` subprocess, it iterates over predefined negative glob patterns and passes each as a flag (`--glob`) to exclude them:\n   ```python\n   _RG_EXCLUDE_GLOBS = (\n       \"!.git\",\n       \"!.venv\",\n       \"!venv\",\n       \"!__pycache__\",\n       \"!node_modules\",\n       \"!.egg-info\",\n       \"!dist\",\n       \"!build\",\n   )\n   ```\n\n2. **Python Fallback Skipping (`_SKIP_DIR_NAMES`):**\n   If ripgrep (and `git grep`) is not available, the pure-Python search fallback and other path scanners explicitly skip any directory parts matching a predefined `_SKIP_DIR_NAMES` set (or starting with a `.`):\n   ```python\n   _SKIP_DIR_NAMES = {\n       \".git\",\n       \"__pycache__\",\n       \"node_modules\",\n       \".venv\",\n       \"venv\",\n       \"dist\",\n       \"build\",\n       \".next\",\n       \"coverage\",\n       \"target\",\n       \"vendor\",\n   }\n   ```",
+    "citations": [
+      {
+        "path": "ragmod/tools/repo.py",
+        "start": 1,
+        "end": 160
+      },
+      {
+        "path": "ragmod/tools/repo.py",
+        "start": 81,
+        "end": 280
+      }
+    ],
+    "error": null,
+    "proxy_tokens_saved_delta": 1491
+  },
+  {
+    "arm": "baseline",
+    "task_id": "bootstrap_search",
+    "question": "Where does the agent bootstrap its first search_repo tool result before the model acts?",
+    "prompt_tokens": 4968,
+    "completion_tokens": 208,
+    "requests": 4,
+    "latency_s": 9.7,
+    "turns": 4,
+    "quality": 2,
+    "quality_max": 2,
+    "answer": "The agent bootstraps its first `search_repo` tool result in **`ragmod/agent/loop.py`** (inside the `ask` function, specifically around lines 196\u2013243) before the model acts.\n\nIt detects a source glob via `detect_source_glob(tools.root)`, constructs a search pattern from the question using `_bootstrap_search_pattern(question)`, and executes the search via `tools.execute(\"search_repo\", bootstrap_args)`. If no matches are found with the glob, it retries without it, then seeds the conversation history with the tool call and tool result before the first model turn.",
+    "citations": [
+      {
+        "path": "ragmod/agent/loop.py",
+        "start": 165,
+        "end": 255
+      }
+    ],
+    "error": null,
+    "proxy_tokens_saved_delta": null
+  },
+  {
+    "arm": "ragmod",
+    "task_id": "bootstrap_search",
+    "question": "Where does the agent bootstrap its first search_repo tool result before the model acts?",
+    "prompt_tokens": 5183,
+    "completion_tokens": 186,
+    "requests": 4,
+    "latency_s": 17.145,
+    "turns": 4,
+    "quality": 2,
+    "quality_max": 2,
+    "answer": "The agent bootstraps its first `search_repo` tool result inside the `ask()` function in **`ragmod/agent/loop.py`** (around lines 201\u2013205). \n\nIt detects a source glob and derives a search pattern from the user's question, executes `tools.execute(\"search_repo\", bootstrap_args)`, and if no matches are found with the glob, falls back to searching without it before injecting the tool result into the conversation history before the model acts.",
+    "citations": [
+      {
+        "path": "ragmod/agent/loop.py",
+        "start": 140,
+        "end": 270
+      }
+    ],
+    "error": null,
+    "proxy_tokens_saved_delta": 2132
+  }
+]

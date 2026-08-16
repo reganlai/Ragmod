@@ -1,0 +1,6 @@
+The proxy turns raw stats into savings by calculating the difference between the original and compressed token counts, and then using this difference to estimate the cost saved in USD. The `stats_to_savings` function takes a dictionary of raw stats as input and returns an object with the original, compressed, and saved token counts, as well as the compression ratio and estimated cost saved.
+
+Sources:
+- ragmod/gateway/proxy.py:69-125
+
+Turns: 2
