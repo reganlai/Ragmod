@@ -1,13 +1,4 @@
 # Ragmod
-
-[![Built with Paritok](https://img.shields.io/badge/Built%20with-Paritok-1f2d3d)](https://github.com/Paritok-official/paritok-4b-v1)
-
-**Over-retrieve on purpose. Paritok makes it affordable.**
-
-A CLI codebase agent: ask a question about a local repo, get an answer with `file:line` citations. Retrieval is intentionally generous (200 search hits, ±40 line reads) and always lands as OpenAI `tool_result`s — the shape [Paritok](https://github.com/Paritok-official/paritok-4b-v1)’s compressor is trained on.
-
-Built with [Paritok](https://github.com/Paritok-official/paritok-4b-v1).
-
 ---
 
 ## Measured results
